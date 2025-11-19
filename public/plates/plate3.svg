@@ -1,0 +1,58 @@
+<svg width="600" height="600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .dot { stroke-width: 0; }
+      .dot-bg1 { fill: #C85050; }
+      .dot-bg2 { fill: #50B450; }
+      .dot-bg3 { fill: #A87033; }
+      .dot-fg1 { fill: #E87A7A; }
+      .dot-fg2 { fill: #7AE87A; }
+    </style>
+  </defs>
+  
+  <!-- Fondo base -->
+  <rect width="600" height="600" fill="#996633"/>
+  
+  <!-- Patrón de puntos de fondo -->
+  <g id="bg-pattern">
+    <circle cx="30" cy="30" r="4" class="dot dot-bg1"/>
+    <circle cx="70" cy="30" r="4" class="dot dot-bg2"/>
+    <circle cx="110" cy="30" r="4" class="dot dot-bg3"/>
+    <circle cx="150" cy="30" r="4" class="dot dot-bg1"/>
+    <circle cx="190" cy="30" r="4" class="dot dot-bg2"/>
+    <circle cx="230" cy="30" r="4" class="dot dot-bg3"/>
+    <circle cx="270" cy="30" r="4" class="dot dot-bg1"/>
+    <circle cx="310" cy="30" r="4" class="dot dot-bg2"/>
+    <circle cx="350" cy="30" r="4" class="dot dot-bg3"/>
+    <circle cx="390" cy="30" r="4" class="dot dot-bg1"/>
+    <circle cx="430" cy="30" r="4" class="dot dot-bg2"/>
+    <circle cx="470" cy="30" r="4" class="dot dot-bg3"/>
+    <circle cx="510" cy="30" r="4" class="dot dot-bg1"/>
+    <circle cx="550" cy="30" r="4" class="dot dot-bg2"/>
+  </g>
+  
+  <!-- Repetir patrón verticalmente -->
+  <use href="#bg-pattern" y="40"/>
+  <use href="#bg-pattern" y="80"/>
+  <use href="#bg-pattern" y="120"/>
+  <use href="#bg-pattern" y="160"/>
+  <use href="#bg-pattern" y="200"/>
+  <use href="#bg-pattern" y="240"/>
+  <use href="#bg-pattern" y="280"/>
+  <use href="#bg-pattern" y="320"/>
+  <use href="#bg-pattern" y="360"/>
+  <use href="#bg-pattern" y="400"/>
+  <use href="#bg-pattern" y="440"/>
+  <use href="#bg-pattern" y="480"/>
+  <use href="#bg-pattern" y="520"/>
+  <use href="#bg-pattern" y="560"/>
+  
+  <!-- Número 2 (izquierda) -->
+  <path d="M 180 180 Q 220 180 220 220 Q 220 260 180 280 Q 220 280 220 320 Q 220 360 180 400 L 220 400" 
+        fill="none" stroke="#E87A7A" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Número 9 (derecha) -->
+  <circle cx="380" cy="240" r="55" fill="none" stroke="#7AE87A" stroke-width="22" stroke-linecap="round"/>
+  <line x1="325" y1="240" x2="380" y2="240" stroke="#7AE87A" stroke-width="22" stroke-linecap="round"/>
+  <line x1="380" y1="240" x2="380" y2="380" stroke="#7AE87A" stroke-width="22" stroke-linecap="round"/>
+</svg>
