@@ -4,11 +4,20 @@
 * { box-sizing: border-box; }
 
 body {
-    background: linear-gradient(135deg, #e6f7ff, #fff0f6);
+    background: linear-gradient(135deg, #FFE5CC, #FFD8BF, #FFCCAA);
+    background-size: 200% 200%;
+    animation: peachFlow 10s ease-in-out infinite;
+
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 20px;
     color: #222;
+}
+
+@keyframes peachFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 /* Pantallas / contenedores */
@@ -153,3 +162,5 @@ button:active { transform: translateY(1px); }
     .row { flex-direction: column; }
     #line-chart { height: 220px; }
 }
+
+
