@@ -140,9 +140,9 @@
 
 <!-- HEADER GLOBAL -->
 <div id="project-header">
-    
-<img id="logo" src="img/logo.png" alt="logo" style="width: 350px;">
-    <div id="project-title">BEYOUND COLOR</div>
+    <img id="logo" src="img/logo.png" alt="BEYOUND COLOR logo" style="width: 150px; margin-bottom: 10px;">
+    <div id="project-title">🎨 BEYOUND COLOR</div>
+    <p style="color: white; font-size: 14px; margin-top: 8px;">Detecta Posibles Casos de Daltonismo</p>
 </div>
 
 <!-- PANTALLA INICIO -->
@@ -166,10 +166,13 @@
     <div class="progress"><div id="progress-bar" class="progress-bar"></div></div>
     <p id="progress-text">0% completado</p>
 
-    <img id="test-image" src="" width="100%" style="border-radius:10px;">
+    <img id="test-image" src="" width="100%" style="border-radius:10px; max-height: 500px; object-fit: contain;">
 
-    <label>¿Qué número ves?</label>
-    <input id="user-answer" type="number" placeholder="Tu respuesta">
+    <p id="hint-text" style="font-style: italic; color: #666; margin: 10px 0;"></p>
+    <div id="answer-feedback" style="text-align: center; margin: 10px 0; font-weight: bold; height: 20px;"></div>
+
+    <label><strong>¿Qué número ves?</strong></label>
+    <input id="user-answer" type="number" placeholder="Ingresa el número que ves" autocomplete="off">
 
     <button id="next-btn" class="green">Siguiente</button>
 </div>

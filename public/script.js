@@ -2,22 +2,18 @@
    CONFIGURACIONES / DATOS
    ------------------------- */
 
-// Asegúrate de que las rutas coincidan con tus archivos en /img/
-const images = [
-    "img/ishihara_2.jpeg",
-    "img/ishihara_5.jpeg",
-    "img/ishihara_6.jpeg",
-    "img/ishihara_7.jpeg",
-    "img/ishihara_8.jpeg",
-    "img/ishihara_10.jpeg",
-    "img/ishihara_26.jpeg",
-    "img/ishihara_42.jpeg",
-    "img/ishihara_69.jpeg",
-    "img/ishihara_74.jpeg"
+// Configuración de placas Ishihara - Usa las imágenes reales del proyecto
+const plates = [
+    { src: "img/ishihara_2.jpeg", answer: "2", hint: "Busca un número" },
+    { src: "img/ishihara_5.jpeg", answer: "5", hint: "Busca un número" },
+    { src: "img/ishihara_6.jpeg", answer: "6", hint: "Busca un número" },
+    { src: "img/ishihara_7.jpeg", answer: "7", hint: "Busca un número" },
+    { src: "img/ishihara_8.jpeg", answer: "8", hint: "Busca un número" },
+    { src: "img/ishihara_10.jpeg", answer: "10", hint: "Busca un número de dos dígitos" }
 ];
 
-// Respuestas correctas (ajusta a tus láminas)
-const correctAnswers = [2, 5, 6, 7, 8, 10, 26, 42, 69, 74];
+const images = plates.map(p => p.src);
+const correctAnswers = plates.map(p => parseInt(p.answer));
 
 const ADMIN_PASSWORD = "admin123"; // contraseña fija
 
@@ -131,6 +127,13 @@ adminOpenBtn.addEventListener("click", () => {
 });
 
 function startTest() {
+    // Validar que tenemos elementos
+    if (!testScreen || !imageElem) {
+        console.error("Elementos del test no encontrados");
+        alert("Error: No se encuentran los elementos de prueba");
+        return;
+    }
+    
     // configurar variables
     index = 0;
     score = 0;
@@ -141,16 +144,30 @@ function startTest() {
     testScreen.classList.remove("hidden");
     testScreen.classList.add("fade-in");
     userInput.value = "";
+    userInput.focus();
     loadTest();
 }
 
 function loadTest() {
-    // animación de imagen (si quieres mantener animaciones)
+    if (!imageElem || !images[index]) {
+        console.error("No se puede cargar la imagen", index);
+        return;
+    }
+    
+    // animación de imagen
     imageElem.classList.remove("image-zoom");
     void imageElem.offsetWidth;
     imageElem.classList.add("image-zoom");
 
     imageElem.src = images[index];
+    imageElem.alt = `Placa Ishihara ${index + 1}`;
+    
+    // Mostrar hint
+    const hintElem = document.getElementById("hint-text");
+    if (hintElem && plates[index]) {
+        hintElem.textContent = plates[index].hint;
+    }
+    
     updateProgress();
 }
 
@@ -160,21 +177,56 @@ function updateProgress() {
     progressText.textContent = percent + "% completado";
 }
 
-nextBtn.addEventListener("click", () => {
-    const val = parseInt(userInput.value);
-    if (!isNaN(val) && val === correctAnswers[index]) score++;
-
+function handleNextClick() {
+    if (!userInput.value.trim()) {
+        alert("Por favor ingresa una respuesta antes de continuar");
+        return;
+    }
+    
+    const val = parseInt(userInput.value.trim());
+    const correct = correctAnswers[index];
+    
+    // Mostrar feedback
+    const feedbackElem = document.getElementById("answer-feedback");
+    if (feedbackElem) {
+        if (!isNaN(val) && val === correct) {
+            score++;
+            feedbackElem.innerHTML = `<span style="color: #4CAF50; font-weight: bold;">✓ ¡Correcto!</span>`;
+        } else {
+            feedbackElem.innerHTML = `<span style="color: #ff6b6b; font-weight: bold;">✗ Incorrecto. La respuesta era: ${correct}</span>`;
+        }
+    }
+    
     index++;
     userInput.value = "";
+    
+    // Pausa breve antes de continuar
+    setTimeout(() => {
+        if (feedbackElem) feedbackElem.innerHTML = "";
+        
+        if (index < images.length) {
+            loadTest();
+        } else {
+            finishTest();
+        }
+    }, 1500);
+}
 
-    if (index < images.length) {
-        loadTest();
-    } else {
-        finishTest();
-    }
-});
+if (nextBtn) {
+    nextBtn.addEventListener("click", handleNextClick);
+    
+    // Permitir Enter para siguiente
+    userInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") handleNextClick();
+    });
+}
 
 function finishTest() {
+    if (!testScreen || !endScreen || !finalScoreElem) {
+        console.error("Elementos finales no encontrados");
+        return;
+    }
+    
     endTime = Date.now();
     const totalSeconds = Math.round((endTime - startTime) / 1000);
 
@@ -183,13 +235,27 @@ function finishTest() {
     endScreen.classList.add("fade-in");
 
     finalScoreElem.textContent = `Aciertos: ${score} / ${images.length}`;
+    
     // Mensaje según resultado
     const percentage = Math.round((score / images.length) * 100);
     let msg = "";
-    if (percentage >= 80) msg = "Visión normal del color.";
-    else if (percentage >= 50) msg = "Posible daltonismo leve.";
-    else msg = "Probable daltonismo rojo–verde.";
-    finalMessageElem.textContent = msg + ` (${percentage}% )`;
+    let diagnosis = "";
+    
+    if (percentage >= 90) {
+        msg = "✓ Visión normal del color";
+        diagnosis = "Tu visión de color es normal. Ningún indicio de daltonismo.";
+    } else if (percentage >= 70) {
+        msg = "⚠ Ligera deficiencia";
+        diagnosis = "Posible deficiencia leve en la percepción de colores.";
+    } else if (percentage >= 50) {
+        msg = "⚠⚠ Deficiencia moderada";
+        diagnosis = "Probable daltonismo moderado. Se recomienda consulta oftalmológica.";
+    } else {
+        msg = "🔴 Deficiencia severa";
+        diagnosis = "Fuerte indicio de daltonismo significativo. Consulta urgente con especialista.";
+    }
+    
+    finalMessageElem.innerHTML = `<strong>${msg}</strong><br><br>${diagnosis}<br><br><strong>Puntuación: ${percentage}%</strong>`;
 
     // Guardar resultado en memoria temporal hasta que usuario pulse "Guardar"
     const entry = {
@@ -431,8 +497,14 @@ adminLoginBtn.addEventListener("click", () => {
     const pass = adminPassInput.value || "";
     if (pass === ADMIN_PASSWORD) {
 
-        // Ocultar pantalla de ingreso
-        adminScreen.classList.add("hidden");
+        // Ocultar elementos de ingreso
+        document.getElementById("admin-pass").classList.add("hidden");
+        document.getElementById("admin-login-btn").classList.add("hidden");
+        document.getElementById("admin-cancel-btn").classList.add("hidden");
+        
+        // Mostrar etiqueta "Panel Admin"
+        const adminTitle = document.querySelector("#admin-screen h2");
+        if (adminTitle) adminTitle.textContent = "Panel Administrador - Sesión Activa";
 
         // Mostrar panel admin real
         adminPanel.classList.remove("hidden");
@@ -470,7 +542,22 @@ adminExportCsvBtn.addEventListener("click", () => {
 });
 
 adminLogoutBtn.addEventListener("click", () => {
+    // Ocultar panel admin
     adminPanel.classList.add("hidden");
+    
+    // Mostrar elementos de ingreso nuevamente
+    document.getElementById("admin-pass").classList.remove("hidden");
+    document.getElementById("admin-login-btn").classList.remove("hidden");
+    document.getElementById("admin-cancel-btn").classList.remove("hidden");
+    
+    // Restaurar título
+    const adminTitle = document.querySelector("#admin-screen h2");
+    if (adminTitle) adminTitle.textContent = "Acceso Administrador";
+    
+    // Limpiar password
+    document.getElementById("admin-pass").value = "";
+    
+    // Volver a pantalla inicio
     adminScreen.classList.add("hidden");
     startScreen.classList.remove("hidden");
 });

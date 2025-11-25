@@ -31,7 +31,7 @@ body {
     transition: transform 0.24s ease, opacity 0.24s ease;
 }
 
-.hidden { display: none; }
+.hidden { display: none !important; }
 
 h1, h2, h3 { margin: 8px 0 14px 0; color: #1a2b4c; }
 
@@ -136,7 +136,23 @@ button:active { transform: translateY(1px); }
 
 /* BOTONES en pantalla final */
 #final-score { font-weight: bold; font-size: 18px; margin: 10px 0; }
-#final-message { font-size: 15px; margin-bottom: 12px; color: #333; }
+#final-message { font-size: 15px; margin-bottom: 12px; color: #333; line-height: 1.6; }
+
+/* Elementos del test */
+#hint-text { 
+    font-style: italic; 
+    color: #666; 
+    margin: 10px 0; 
+    font-size: 14px;
+}
+
+#answer-feedback {
+    text-align: center; 
+    margin: 10px 0; 
+    font-weight: bold; 
+    height: 20px;
+    font-size: 16px;
+}
 
 /* Admin area */
 #admin-panel { margin-top: 12px; padding-top: 8px; border-top: 1px dashed #ddd; }
